@@ -1,0 +1,87 @@
+DataTypes:
+round up/down
+1 byte: bool, char
+2 bytes: short int
+4 bytes: int, long int, float
+8 bytes: double
+guaranteed about interger types:
+sizeof(char) == 1
+sizeof(char) <= sizeof(short)
+sizeof(short) <= sizeof(int)
+sizeof(int) <= sizeof(long)
+sizeof(long) <= sizeof(long long)
+sizeof(char) * CHAR_BIT >= 8
+sizeof(short) * CHAR_BIT >= 16
+sizeof(int) * CHAR_BIT >= 16
+sizeof(long) * CHAR_BIT >= 32
+sizeof(long long) * CHAR_BIT >= 64
+convert float a to int: use "static_cast<int>(a)"
+Stack data structure idea: Klaus Samelson/Friedrich L.Bauer 1955
+
+Functions:
+Pass by value: copies the passed argument into the function. 
+original stays untouched, but copying is expensive.
+Pass by reference: shares the passed argument with function. 
+no copy overhead, but the function my modify the original.
+Pass by const reference: shares the passed argument with the function in a read-oinly fashion. 
+no copy overhead and the function connot modify the original. Use for large original.
+template <typename T> T func(T x){return x + static_cast<T>(40);}
+Lambda function [captured_state](arguments){body}
+Error handeling:
+for (auto& elem : vec){
+    try {
+        func(arg);
+    }
+    catch(const std::invalid_argument& error){
+        std::cerr << "Warning: " << error.what() << "\n";
+    }
+}
+
+Resource management:
+Heap segment administration:
+On stack: mapping of (new) variables onto memory locations -> deterministic and consecutive
+On heap: no such mapping possible -> size of reserve data unknown at compile time
+Smart pointers automatically delete the memory they point to when they are not being used  anymore (via their destructor).
+RAII Resource Acquisition Is Initialization: The same object that called new, also calls delete.
+
+
+Build time:
+Linker: binding object files and linked libraries into executables
+constant expressions: allows us to run code at compile time. (constexpr)
+int, float, C-style arrays, and some STL containers can be marked constexpr
+
+OOP1:
+Default Access: class-private, struct-public
+protected: ony objects of the same or derived classes can access these members.
+
+Why shouldn't we make all member variables public?
+Only expose what is meant to be modified.
+Ensure that the object is modified consistently
+Hide the implementation details (all the same for the user of the class)
+
+Visibility: Static members are visible globally through out the running of your application but accessible only with regard to the modifier applied to them.
+"static" means members are shared (have the same value) among all objects of a class.
+
+Constructor: Create an object(initializing its members)
+Destructor: Destroy the object when going out-of-scope
+Copy constructor: Create an object given another object of the same typeCopy-assignment operator: Assign one object to another object of the same type
+Move constructor: Steal the resources of an existing object to create a new one
+Move-assignment operator Steal the resources of another object and assign them to this object
+Operator overloading: 
+class Point {
+    Point operator-(const Point & other_point){
+        return Point (_x - other_point._x,
+                      _y - other_point._y);
+    }
+}
+To forbid some operations, by deleting them:
+Point (const Point & from_line) = delete;
+Default Copy constructors copy member-by-member-> copy a pointer, but not the underlying dynamically allocated memory,if any.
+If a class contains pointers to dynamic momery, we need to also copy the memory pointed to.
+Friend of my class: I allow this function to access my private members.
+Friendship is NOT
+symmetric: class A {friend class B;} != class B {friend class A;}
+nherited class A {friend class B;} and class C : A{}; != class C{friend class B;};
+
+
+
